@@ -1,12 +1,12 @@
-#include <stdio.h>
+п»ї#include <stdio.h>
 #include <mpi.h>
 
-#define N 256  // Размер массивов
+#define N 256// Р Р°Р·РјРµСЂ РјР°СЃСЃРёРІРѕРІ
 
 int main(int argc, char** argv)
 {
     static float A[N], B[N], C[N], Y[N];
-    float S1 = 2.0; // Скаляр
+    float S1 = 2.0; // РЎРєР°Р»СЏСЂ
     int rank, size, cycle, i;
     MPI_Status status;
     double time1, time2, time;
@@ -17,48 +17,48 @@ int main(int argc, char** argv)
 
     //printf("Hello from process %d of %d\n", rank, size);
 
-    // --- Если процесс нулевой ---
+    // --- Р•СЃР»Рё РїСЂРѕС†РµСЃСЃ РЅСѓР»РµРІРѕР№ ---
     if (rank == 0)
     {
-        // Инициализация массивов
+        // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РјР°СЃСЃРёРІРѕРІ
         for (i = 0; i < N; i++) {
             A[i] = i + 1;
             B[i] = i + 2;
             C[i] = i + 3;
         }
 
-        time1 = MPI_Wtime(); // начало замера времени
+        time1 = MPI_Wtime(); // РЅР°С‡Р°Р»Рѕ Р·Р°РјРµСЂР° РІСЂРµРјРµРЅРё
 
-        for (cycle = 0; cycle < 10000; cycle++)  // Цикл кратности
+        for (cycle = 0; cycle < 10000; cycle++)  // Р¦РёРєР» РєСЂР°С‚РЅРѕСЃС‚Рё
         {
-            // Рассылка частей массива B другим процессам
+            // Р Р°СЃСЃС‹Р»РєР° С‡Р°СЃС‚РµР№ РјР°СЃСЃРёРІР° B РґСЂСѓРіРёРј РїСЂРѕС†РµСЃСЃР°Рј
             for (int p = 1; p < size; p++) {
                 //MPI_Send(&A[p * N / size], N / size, MPI_FLOAT, p, 0, MPI_COMM_WORLD);
                 MPI_Send(&B[p * N / size], N / size, MPI_FLOAT, p, 1, MPI_COMM_WORLD);
                 //MPI_Send(&C[p * N / size], N / size, MPI_FLOAT, p, 2, MPI_COMM_WORLD);
             }
 
-            // Вычисления для нулевого процесса
+            // Р’С‹С‡РёСЃР»РµРЅРёСЏ РґР»СЏ РЅСѓР»РµРІРѕРіРѕ РїСЂРѕС†РµСЃСЃР°
             for (i = 0; i < N / size; i++)
                 Y[i] = A[i] * S1 + C[i] / (A[i] + B[i]);
 
-            // Приём результатов от остальных процессов
+            // РџСЂРёС‘Рј СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ РѕС‚ РѕСЃС‚Р°Р»СЊРЅС‹С… РїСЂРѕС†РµСЃСЃРѕРІ
             for (int p = 1; p < size; p++)
                 MPI_Recv(&Y[p * N / size], N / size, MPI_FLOAT, p, 3, MPI_COMM_WORLD, &status);
         }
 
-        time2 = MPI_Wtime(); // конец замера
+        time2 = MPI_Wtime(); // РєРѕРЅРµС† Р·Р°РјРµСЂР°
         time = time2 - time1;
 
-        // Вывод результатов
+        // Р’С‹РІРѕРґ СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ
         /*for (i = 0; i < N; i++)
             printf("Y[%d] = %f\n", i, Y[i]);*/
         printf("TIME = %f sec\n", time);
     }
-    // --- Если процесс не нулевой ---
+    // --- Р•СЃР»Рё РїСЂРѕС†РµСЃСЃ РЅРµ РЅСѓР»РµРІРѕР№ ---
     else
     {
-        // Инициализация массивов
+        // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РјР°СЃСЃРёРІРѕРІ
         for (i = 0; i < N; i++) {
             A[i] = i + 1;
             //B[i] = i + 2;
@@ -67,16 +67,16 @@ int main(int argc, char** argv)
 
         for (cycle = 0; cycle < 10000; cycle++)
         {
-            // Получение частей массива
+            // РџРѕР»СѓС‡РµРЅРёРµ С‡Р°СЃС‚РµР№ РјР°СЃСЃРёРІР°
             //MPI_Recv(&A[rank * N / size], N / size, MPI_FLOAT, 0, 0, MPI_COMM_WORLD, &status);
             MPI_Recv(&B[rank * N / size], N / size, MPI_FLOAT, 0, 1, MPI_COMM_WORLD, &status);
             //MPI_Recv(&C[rank * N / size], N / size, MPI_FLOAT, 0, 2, MPI_COMM_WORLD, &status);
 
-            // Вычисление своей части
+            // Р’С‹С‡РёСЃР»РµРЅРёРµ СЃРІРѕРµР№ С‡Р°СЃС‚Рё
             for (i = rank * N / size; i < (rank + 1) * N / size; i++)
                 Y[i] = A[i] * S1 + C[i] / (A[i] + B[i]);
 
-            // Отправка результата обратно нулевому процессу
+            // РћС‚РїСЂР°РІРєР° СЂРµР·СѓР»СЊС‚Р°С‚Р° РѕР±СЂР°С‚РЅРѕ РЅСѓР»РµРІРѕРјСѓ РїСЂРѕС†РµСЃСЃСѓ
             MPI_Send(&Y[rank * N / size], N / size, MPI_FLOAT, 0, 3, MPI_COMM_WORLD);
         }
     }
