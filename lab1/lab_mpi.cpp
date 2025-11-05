@@ -3,7 +3,7 @@
 
 #define N 256// Размер массивов
 
-int main(int argc, char** argv)
+int main2(int argc, char** argv)
 {
     static float A[N], B[N], C[N], Y[N];
     float S1 = 2.0; // Скаляр

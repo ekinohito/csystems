@@ -27,5 +27,13 @@
     <ClCompile Include="lab_mpi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="fun.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="fun.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,7 +1,7 @@
-#include <iostream>
+﻿#include <iostream>
 #include "mpi.h"
 
-int hello_main(int argc, char** argv) {
+int main4(int argc, char** argv) {
     int rank, size;
 
     // Initialize MPI
