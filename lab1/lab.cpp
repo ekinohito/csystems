@@ -36,7 +36,7 @@ int main(int argc, char **argv)
 {
     int rank;
     static float A[N][N], B[N][N], C[N][N], D[N][N], E[N][N];
-    static float T0[N][N], T1[N][N];
+
     MPI_Status status;
 
     inits(A); // Инициализация матриц
@@ -54,50 +54,50 @@ int main(int argc, char **argv)
     {
         MPI_Request send_b_minus_e, recv_e_minus_c, recv_y4, recv_y3, recv_y1;
         MPI_Send_init(A, N * N, MPI_FLOAT, RANK_3, TAG_B_MINUS_E, MPI_COMM_WORLD, &send_b_minus_e);
-        MPI_Recv_init(T0, N * N, MPI_FLOAT, RANK_2, TAG_E_MINUS_C, MPI_COMM_WORLD, &recv_e_minus_c); 
-        MPI_Recv_init(T1, N * N, MPI_FLOAT, RANK_3, TAG_Y_4, MPI_COMM_WORLD, &recv_y4);           
-        MPI_Recv_init(E, N * N, MPI_FLOAT, RANK_2, TAG_Y_3, MPI_COMM_WORLD, &recv_y3);           
-        MPI_Recv_init(D, N * N, MPI_FLOAT, RANK_1, TAG_Y_1, MPI_COMM_WORLD, &recv_y1);            
+        MPI_Recv_init(C, N * N, MPI_FLOAT, RANK_2, TAG_E_MINUS_C, MPI_COMM_WORLD, &recv_e_minus_c);
+        MPI_Recv_init(A, N * N, MPI_FLOAT, RANK_3, TAG_Y_4, MPI_COMM_WORLD, &recv_y4);
+        MPI_Recv_init(D, N * N, MPI_FLOAT, RANK_2, TAG_Y_3, MPI_COMM_WORLD, &recv_y3);
+        MPI_Recv_init(E, N * N, MPI_FLOAT, RANK_1, TAG_Y_1, MPI_COMM_WORLD, &recv_y1);
 
         MPI_Start(&recv_e_minus_c);
         MPI_Start(&recv_y4);
         MPI_Start(&recv_y3);
-        MPI_Start(&recv_y1);
 
         sub(B, E, A);
-        MPI_Start(&send_b_minus_e); // MPI_Send(A, N * N, MPI_FLOAT, RANK_3, TAG_B_MINUS_E, MPI_COMM_WORLD);
+        MPI_Start(&recv_y1);
+        MPI_Start(&send_b_minus_e);
         dbg("r0: B - E -> r3");
-        MPI_Wait(&recv_e_minus_c, &status); // MPI_Recv(T0, N * N, MPI_FLOAT, RANK_2, TAG_E_MINUS_C, MPI_COMM_WORLD, &status); // T0 = E - C (Receive)
+        MPI_Wait(&recv_e_minus_c, &status);
         dbg("r0: r2 -> E - C");
-        mul(A, T0, C);
-        MPI_Wait(&recv_y4, &status); // MPI_Recv(T1, N * N, MPI_FLOAT, RANK_3, TAG_Y_4, MPI_COMM_WORLD, &status); // T1 = Y4 (Receive)
+        mul(A, C, B);
+        MPI_Wait(&recv_y4, &status);
         dbg("r0: r3 -> Y4");
-        add(C, T1, B);                // B = Y2
-        MPI_Wait(&recv_y3, &status); // MPI_Recv(E, N * N, MPI_FLOAT, RANK_2, TAG_Y_3, MPI_COMM_WORLD, &status); // E = Y3 (Receive)
+        add(B, A, C);
+        MPI_Wait(&recv_y3, &status);
         dbg("r0: r2 -> Y3");
-        MPI_Wait(&recv_y1, &status); // MPI_Recv(D, N * N, MPI_FLOAT, RANK_1, TAG_Y_1, MPI_COMM_WORLD, &status); // D = Y1 (Receive)
+        MPI_Wait(&recv_y1, &status);
         dbg("r0: r1 -> Y1");
         dbg("r0: DONE");
     }
     else if (rank == RANK_1)
     {
         MPI_Request recv_e_minus_c, recv_y4, send_y1;
-        MPI_Recv_init(T0, N * N, MPI_FLOAT, RANK_2, TAG_E_MINUS_C, MPI_COMM_WORLD, &recv_e_minus_c); // T0 = E - C (Receive)
-        MPI_Recv_init(T1, N * N, MPI_FLOAT, RANK_3, TAG_Y_4, MPI_COMM_WORLD, &recv_y4); // T1 = Y4 (Receive)
+        MPI_Recv_init(E, N * N, MPI_FLOAT, RANK_2, TAG_E_MINUS_C, MPI_COMM_WORLD, &recv_e_minus_c); // T0 = E - C (Receive)
+        MPI_Recv_init(B, N * N, MPI_FLOAT, RANK_3, TAG_Y_4, MPI_COMM_WORLD, &recv_y4);               // E = Y4 (Receive)
         MPI_Send_init(A, N * N, MPI_FLOAT, RANK_0, TAG_Y_1, MPI_COMM_WORLD, &send_y1);
 
         MPI_Start(&recv_e_minus_c);
-        MPI_Start(&recv_y4);
 
         mul(B, D, C);
+        MPI_Start(&recv_y4);
         MPI_Wait(&recv_e_minus_c, &status); // MPI_Recv(T0, N * N, MPI_FLOAT, RANK_2, TAG_E_MINUS_C, MPI_COMM_WORLD, &status); // T0 = E - C (Receive)
         dbg("r1: r2 -> E - C");
-        divv(C, T0, D);
-        sub(D, A, B);
-        MPI_Wait(&recv_y4, &status); // MPI_Recv(T1, N * N, MPI_FLOAT, RANK_3, TAG_Y_4, MPI_COMM_WORLD, &status); // T1 = Y4 (Receive)
+        divv(C, E, D);
+        sub(D, A, C);
+        MPI_Wait(&recv_y4, &status); // MPI_Recv(E, N * N, MPI_FLOAT, RANK_3, TAG_Y_4, MPI_COMM_WORLD, &status); // E = Y4 (Receive)
         dbg("r1: r3 -> Y4");
-        add(B, T1, A);
-        MPI_Send(A, N * N, MPI_FLOAT, RANK_0, TAG_Y_1, MPI_COMM_WORLD);
+        add(C, B, A);
+        MPI_Start(&send_y1); // MPI_Send(A, N * N, MPI_FLOAT, RANK_0, TAG_Y_1, MPI_COMM_WORLD);
         dbg("r1: Y1 -> r0");
     }
     else if (rank == RANK_2)
@@ -106,7 +106,7 @@ int main(int argc, char **argv)
         MPI_Send_init(D, N * N, MPI_FLOAT, RANK_0, TAG_E_MINUS_C, MPI_COMM_WORLD, &send_e_minus_c_1);
         MPI_Send_init(D, N * N, MPI_FLOAT, RANK_1, TAG_E_MINUS_C, MPI_COMM_WORLD, &send_e_minus_c_2);
         MPI_Send_init(B, N * N, MPI_FLOAT, RANK_0, TAG_Y_3, MPI_COMM_WORLD, &send_y3);
-    
+
         sub(E, C, D);
         MPI_Start(&send_e_minus_c_1); // MPI_Send(D, N * N, MPI_FLOAT, RANK_0, TAG_E_MINUS_C, MPI_COMM_WORLD);
         dbg("r2: E - C -> r0");

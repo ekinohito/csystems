@@ -35,8 +35,7 @@
 int main_bloc(int argc, char **argv)
 {
     int rank;
-    static float A[N][N], B[N][N], C[N][N], D[N][N], E[N][N];
-    // static float T0[N][N], T1[N][N], T2[N][N];
+    float A[N][N], B[N][N], C[N][N], D[N][N], E[N][N];
     MPI_Status status;
 
     inits(A); // Инициализация матриц
