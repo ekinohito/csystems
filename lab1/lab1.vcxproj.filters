@@ -21,13 +21,10 @@
     <ClCompile Include="hello.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="lab_mpi_real.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lab_mpi.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="fun.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="example.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

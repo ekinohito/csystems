@@ -10,7 +10,7 @@ void inits(float a[N][N])
 }
 
 // Покомпонентное сложение матриц
-void add(float a[N][N], float b[N][N], float res[N][N])
+void add(const float a[N][N], const float b[N][N], float res[N][N])
 {
     for (int i = 0; i < N; i++)
         for (int j = 0; j < N; j++)
@@ -18,7 +18,7 @@ void add(float a[N][N], float b[N][N], float res[N][N])
 }
 
 // Покомпонентное вычитание матриц
-void sub(float a[N][N], float b[N][N], float res[N][N])
+void sub(const float a[N][N], const float b[N][N], float res[N][N])
 {
     for (int i = 0; i < N; i++)
         for (int j = 0; j < N; j++)
@@ -26,7 +26,7 @@ void sub(float a[N][N], float b[N][N], float res[N][N])
 }
 
 // Покомпонентное "умножение" матриц (элемент на элемент)
-void mul(float a[N][N], float b[N][N], float res[N][N])
+void mul(const float a[N][N], const float b[N][N], float res[N][N])
 {
     for (int i = 0; i < N; i++)
         for (int j = 0; j < N; j++)
@@ -34,7 +34,7 @@ void mul(float a[N][N], float b[N][N], float res[N][N])
 }
 
 // Покомпонентное деление матриц (a / b)
-void divv(float a[N][N], float b[N][N], float res[N][N])
+void divv(const float a[N][N], const float b[N][N], float res[N][N])
 {
     for (int i = 0; i < N; i++)
         for (int j = 0; j < N; j++)

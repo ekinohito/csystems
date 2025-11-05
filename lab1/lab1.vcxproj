@@ -130,11 +130,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="example.cpp" />
     <ClCompile Include="fun.cpp" />
     <ClCompile Include="hello.cpp" />
     <ClCompile Include="lab.cpp" />
-    <ClCompile Include="lab_mpi.cpp" />
-    <ClCompile Include="lab_mpi_real.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fun.h" />
