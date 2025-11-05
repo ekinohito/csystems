@@ -24,18 +24,11 @@ int main(int argc, char **argv)
         add(T0, C, T1);
         mul(T1, T1, T2);
         // Принимаем данные в неиспользуемый массив D
-        MPI_Recv(D, N * N, MPI_FLOAT, 1, 1, MPI_COMM_WORLD, &status);
-        printf("Y2 received");
-        fflush(stdout);
-        
+        MPI_Recv(D, N * N, MPI_FLOAT, 2, 1, MPI_COMM_WORLD, &status);
         sub(T2, D, T1); // Пусть T1 будет за Y1
         // Принимаем в T2 и T0 значения Y2 и Y3
         MPI_Recv(T2, N * N, MPI_FLOAT, 1, 2, MPI_COMM_WORLD, &status);
-        printf("Y2 received");
-        fflush(stdout);
         MPI_Recv(T0, N * N, MPI_FLOAT, 2, 2, MPI_COMM_WORLD, &status);
-        printf("Y3 received");
-        fflush(stdout);
     }
 
     if (rank == 1)
@@ -50,8 +43,6 @@ int main(int argc, char **argv)
         divv(T2, D, T0); // Пусть T0 будет за Y2
         // Посылаем Y2 нулевому процессу
         MPI_Send(T0, N * N, MPI_FLOAT, 0, 2, MPI_COMM_WORLD);
-        printf("Rank 1 done");
-        fflush(stdout);
     }
 
     if (rank == 2)
@@ -63,8 +54,6 @@ int main(int argc, char **argv)
         divv(T1, D, T2); // Пусть T2 будет за Y3
         // Посылаем Y3 нулевому процессу
         MPI_Send(T2, N * N, MPI_FLOAT, 0, 2, MPI_COMM_WORLD);
-        printf("Rank 2 done");
-        fflush(stdout);
     }
 
     MPI_Finalize();
