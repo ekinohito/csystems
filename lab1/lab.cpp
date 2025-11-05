@@ -48,8 +48,11 @@ int main(int argc, char **argv)
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
+    double start = MPI_Wtime();
+
     if (rank == RANK_0)
     {
+
         sub(B, E, A);
         MPI_Send(A, N * N, MPI_FLOAT, RANK_3, TAG_B_MINUS_E, MPI_COMM_WORLD);
         dbg("r0: B - E -> r3");
@@ -102,6 +105,9 @@ int main(int argc, char **argv)
         dbg("r3: Y4 -> r1");
     }
 
+    if (rank == RANK_0) {
+        dbg("TOTAL TIME: %f s", MPI_Wtime() - start);
+    }
     MPI_Finalize();
     return 0;
 }
