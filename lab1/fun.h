@@ -1,7 +1,7 @@
 ﻿#ifndef FUN_H
 #define FUN_H
 
-#define N 8192
+#define N 64
 
 void inits(float a[N][N]);
 void add(const float a[N][N], const float b[N][N], float res[N][N]);

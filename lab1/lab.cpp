@@ -14,7 +14,7 @@
 #define RANK_2 2 // Вычисляет Y3
 #define RANK_3 3 // Вычисляет Y4
 
-#define DEBUG
+// #define DEBUG
 
 #ifdef DEBUG
 #include <stdio.h>
@@ -106,7 +106,7 @@ int main(int argc, char **argv)
     }
 
     if (rank == RANK_0) {
-        dbg("TOTAL TIME: %f s", MPI_Wtime() - start);
+        printf("%f\n", MPI_Wtime() - start);
     }
     MPI_Finalize();
     return 0;
