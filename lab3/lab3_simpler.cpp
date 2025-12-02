@@ -1,4 +1,4 @@
-﻿#include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>
 #include <cmath>
@@ -116,6 +116,22 @@ void mat_div_elem_parallel(double **A, double **B, double **C, int n)
     }
 }
 
+void mat_mul_elem_parallel(double **A, double **B, double **C, int n)
+{
+#pragma omp parallel
+    {
+        int tid = omp_get_thread_num();
+        int nt = omp_get_num_threads();
+        int rows_per_thread = n / nt;
+        int start = tid * rows_per_thread;
+        int end = (tid == nt - 1) ? n : start + rows_per_thread;
+
+        for (int i = start; i < end; i++)
+            for (int j = 0; j < n; j++)
+                C[i][j] = A[i][j] * B[i][j];
+    }
+}
+
 void mat_mul_parallel(double **A, double **B, double **C, int n)
 {
     // Zero C first
@@ -177,6 +193,15 @@ void section_div_elem(int sec, double **A, double **B, double **C)
     for (int i = start; i < end; i++)
         for (int j = 0; j < N; j++)
             C[i][j] = A[i][j] / B[i][j];
+}
+
+void section_mul_elem(int sec, double **A, double **B, double **C)
+{
+    int start = SECTION_START(sec);
+    int end = SECTION_END(sec);
+    for (int i = start; i < end; i++)
+        for (int j = 0; j < N; j++)
+            C[i][j] = A[i][j] * B[i][j];
 }
 
 void section_mul_row_block(int sec, double **A, double **B, double **C)
@@ -310,6 +335,45 @@ void mat_div_elem_sections(double **A, double **B, double **C, int n)
     }
 }
 
+void mat_mul_elem_sections(double **A, double **B, double **C, int n)
+{
+#pragma omp parallel sections
+    {
+#pragma omp section
+        {
+            section_mul_elem(0, A, B, C);
+        }
+#pragma omp section
+        {
+            section_mul_elem(1, A, B, C);
+        }
+#pragma omp section
+        {
+            section_mul_elem(2, A, B, C);
+        }
+#pragma omp section
+        {
+            section_mul_elem(3, A, B, C);
+        }
+#pragma omp section
+        {
+            section_mul_elem(4, A, B, C);
+        }
+#pragma omp section
+        {
+            section_mul_elem(5, A, B, C);
+        }
+#pragma omp section
+        {
+            section_mul_elem(6, A, B, C);
+        }
+#pragma omp section
+        {
+            section_mul_elem(7, A, B, C);
+        }
+    }
+}
+
 void mat_mul_sections(double **A, double **B, double **C, int n)
 {
     // Zero matrix first (can be parallelized separately)
@@ -383,6 +447,14 @@ void mat_div_elem_for(double **A, double **B, double **C, int n)
             C[i][j] = A[i][j] / B[i][j];
 }
 
+void mat_mul_elem_for(double **A, double **B, double **C, int n)
+{
+#pragma omp parallel for collapse(2)
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            C[i][j] = A[i][j] * B[i][j];
+}
+
 void mat_mul_for(double **A, double **B, double **C, int n)
 {
 #pragma omp parallel for collapse(2)
@@ -409,7 +481,7 @@ void compute_y_parallel(double **A, double **B, double **C, double **Y, int n)
 
     mat_add_parallel(A, B, temp1, n);
     mat_div_elem_parallel(C, temp1, temp2, n);
-    mat_mul_parallel(A, B, temp3, n);
+    mat_mul_elem_parallel(A, B, temp3, n);
     mat_add_parallel(temp3, temp2, Y, n);
 
     free_matrix(temp1, n);
@@ -425,7 +497,7 @@ void compute_y_sections(double **A, double **B, double **C, double **Y, int n)
 
     mat_add_sections(A, B, temp1, n);
     mat_div_elem_sections(C, temp1, temp2, n);
-    mat_mul_sections(A, B, temp3, n);
+    mat_mul_elem_sections(A, B, temp3, n);
     mat_add_sections(temp3, temp2, Y, n);
 
     free_matrix(temp1, n);
@@ -441,7 +513,7 @@ void compute_y_for(double **A, double **B, double **C, double **Y, int n)
 
     mat_add_for(A, B, temp1, n);
     mat_div_elem_for(C, temp1, temp2, n);
-    mat_mul_for(A, B, temp3, n);
+    mat_mul_elem_for(A, B, temp3, n);
     mat_add_for(temp3, temp2, Y, n);
 
     free_matrix(temp1, n);
@@ -478,9 +550,9 @@ int main_part()
     compute_y_for(A, B, C, Y3, N);
     t3 = omp_get_wtime() - t3;
 
-    printf("Manual parallel:  %.4f s\n", t1);
-    printf("Sections (8):     %.4f s\n", t2);
-    printf("omp for:          %.4f s\n", t3);
+    printf("Manual parallel:  %.6f s\n", t1);
+    printf("Sections (8):     %.6f s\n", t2);
+    printf("omp for:          %.6f s\n", t3);
 
     // --------------------- Correctness check ---------------------
     double tol = 1e-10;
@@ -522,7 +594,7 @@ int main() {
         printf("N = %d; Threads = %d\n", N, i);
         main_part();
     }
-    N = 2048;
+    N = 4096;
     for (int i = 1; i <= 8; ++i) {
         omp_set_num_threads(i);
         printf("N = %d; Threads = %d\n", N, i);

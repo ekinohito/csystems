@@ -1,80 +1,120 @@
 N = 256; Threads = 1
-Manual parallel:  0.1024 s
-Sections (8):     0.0895 s
-omp for:          0.1692 s
+Manual parallel:  0.0928 s
+Sections (8):     0.0619 s
+omp for:          0.0948 s
 All three implementations produce IDENTICAL results (within 1e-10)
 N = 256; Threads = 2
-Manual parallel:  0.0440 s
-Sections (8):     0.0344 s
-omp for:          0.0500 s
+Manual parallel:  0.0363 s
+Sections (8):     0.0317 s
+omp for:          0.0471 s
 All three implementations produce IDENTICAL results (within 1e-10)
 N = 256; Threads = 3
-Manual parallel:  0.0271 s
-Sections (8):     0.0250 s
-omp for:          0.0371 s
+Manual parallel:  0.0250 s
+Sections (8):     0.0233 s
+omp for:          0.0323 s
 All three implementations produce IDENTICAL results (within 1e-10)
 N = 256; Threads = 4
-Manual parallel:  0.0326 s
-Sections (8):     0.0209 s
-omp for:          0.0356 s
+Manual parallel:  0.0193 s
+Sections (8):     0.0177 s
+omp for:          0.0270 s
 All three implementations produce IDENTICAL results (within 1e-10)
 N = 256; Threads = 5
-Manual parallel:  0.0310 s
-Sections (8):     0.0241 s
-omp for:          0.0361 s
+Manual parallel:  0.0285 s
+Sections (8):     0.0189 s
+omp for:          0.0392 s
 All three implementations produce IDENTICAL results (within 1e-10)
 N = 256; Threads = 6
-Manual parallel:  0.0237 s
-Sections (8):     0.0223 s
-omp for:          0.0314 s
+Manual parallel:  0.0239 s
+Sections (8):     0.0178 s
+omp for:          0.0310 s
 All three implementations produce IDENTICAL results (within 1e-10)
 N = 256; Threads = 7
-Manual parallel:  0.0200 s
-Sections (8):     0.0189 s
+Manual parallel:  0.0219 s
+Sections (8):     0.0196 s
 omp for:          0.0264 s
 All three implementations produce IDENTICAL results (within 1e-10)
 N = 256; Threads = 8
-Manual parallel:  0.0187 s
-Sections (8):     0.0196 s
-omp for:          0.0236 s
+Manual parallel:  0.0180 s
+Sections (8):     0.0176 s
+omp for:          0.0233 s
 All three implementations produce IDENTICAL results (within 1e-10)
 N = 1024; Threads = 1
-Manual parallel:  8.7099 s
-Sections (8):     7.9098 s
-omp for:          10.8152 s
+Manual parallel:  8.6465 s
+Sections (8):     7.9284 s
+omp for:          10.8800 s
 All three implementations produce IDENTICAL results (within 1e-10)
 N = 1024; Threads = 2
-Manual parallel:  4.3095 s
-Sections (8):     3.8882 s
-omp for:          5.4820 s
+Manual parallel:  4.3044 s
+Sections (8):     3.9368 s
+omp for:          5.3876 s
 All three implementations produce IDENTICAL results (within 1e-10)
 N = 1024; Threads = 3
-Manual parallel:  3.0543 s
-Sections (8):     2.9697 s
-omp for:          3.7879 s
+Manual parallel:  2.7672 s
+Sections (8):     2.8546 s
+omp for:          3.4939 s
 All three implementations produce IDENTICAL results (within 1e-10)
 N = 1024; Threads = 4
-Manual parallel:  2.2925 s
-Sections (8):     2.0378 s
-omp for:          2.8939 s
+Manual parallel:  2.2409 s
+Sections (8):     2.0858 s
+omp for:          2.7863 s
 All three implementations produce IDENTICAL results (within 1e-10)
 N = 1024; Threads = 5
-Manual parallel:  2.1675 s
-Sections (8):     2.4286 s
-omp for:          2.9237 s
+Manual parallel:  2.1451 s
+Sections (8):     2.5433 s
+omp for:          2.6784 s
 All three implementations produce IDENTICAL results (within 1e-10)
 N = 1024; Threads = 6
-Manual parallel:  2.2274 s
-Sections (8):     2.5286 s
-omp for:          2.5614 s
+Manual parallel:  2.3439 s
+Sections (8):     2.4215 s
+omp for:          2.7079 s
 All three implementations produce IDENTICAL results (within 1e-10)
 N = 1024; Threads = 7
-Manual parallel:  2.0512 s
-Sections (8):     2.6585 s
-omp for:          2.8119 s
+Manual parallel:  2.3240 s
+Sections (8):     2.7229 s
+omp for:          2.7368 s
 All three implementations produce IDENTICAL results (within 1e-10)
 N = 1024; Threads = 8
-Manual parallel:  2.0619 s
-Sections (8):     1.8332 s
-omp for:          2.5530 s
+Manual parallel:  2.0734 s
+Sections (8):     1.8998 s
+omp for:          2.5995 s
+All three implementations produce IDENTICAL results (within 1e-10)
+N = 2048; Threads = 1
+Manual parallel:  82.9104 s
+Sections (8):     76.7094 s
+omp for:          100.5114 s
+All three implementations produce IDENTICAL results (within 1e-10)
+N = 2048; Threads = 2
+Manual parallel:  39.2057 s
+Sections (8):     37.4962 s
+omp for:          50.9857 s
+All three implementations produce IDENTICAL results (within 1e-10)
+N = 2048; Threads = 3
+Manual parallel:  25.7327 s
+Sections (8):     28.3579 s
+omp for:          33.0949 s
+All three implementations produce IDENTICAL results (within 1e-10)
+N = 2048; Threads = 4
+Manual parallel:  21.6689 s
+Sections (8):     20.6924 s
+omp for:          27.3223 s
+All three implementations produce IDENTICAL results (within 1e-10)
+N = 2048; Threads = 5
+Manual parallel:  22.6932 s
+Sections (8):     23.0176 s
+omp for:          27.4589 s
+All three implementations produce IDENTICAL results (within 1e-10)
+N = 2048; Threads = 6
+Manual parallel:  22.0885 s
+Sections (8):     24.8693 s
+omp for:          27.3621 s
+All three implementations produce IDENTICAL results (within 1e-10)
+N = 2048; Threads = 7
+Manual parallel:  21.9428 s
+Sections (8):     26.8893 s
+omp for:          26.4434 s
+All three implementations produce IDENTICAL results (within 1e-10)
+N = 2048; Threads = 8
+Manual parallel:  21.5926 s
+Sections (8):     20.6306 s
+omp for:          26.2060 s
 All three implementations produce IDENTICAL results (within 1e-10)

@@ -1,4 +1,4 @@
-﻿#include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>
 #include <cmath>
@@ -517,12 +517,6 @@ int main() {
         main_part();
     }
     N = 1024;
-    for (int i = 1; i <= 8; ++i) {
-        omp_set_num_threads(i);
-        printf("N = %d; Threads = %d\n", N, i);
-        main_part();
-    }
-    N = 2048;
     for (int i = 1; i <= 8; ++i) {
         omp_set_num_threads(i);
         printf("N = %d; Threads = %d\n", N, i);
