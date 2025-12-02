@@ -1,0 +1,20 @@
+N = 1024; Threads = 8; Chunk: 8
+omp for:          3.3881 s
+
+N = 1024; Threads = 8; Chunk: 16
+omp for:          3.1010 s
+
+N = 1024; Threads = 8; Chunk: 32
+omp for:          3.3809 s
+
+N = 1024; Threads = 8; Chunk: 64
+omp for:          3.1183 s
+
+N = 1024; Threads = 8; Chunk: 128
+omp for:          3.3476 s
+
+N = 1024; Threads = 8; Chunk: 256
+omp for:          3.0573 s
+
+N = 1024; Threads = 8; Chunk: dynamic
+omp for:          3.3429 s
